@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="./css/checkDemo.css" />
+
+</head>
+
+<body>
+  <div class="wrap">
+    <div>
+      <input type="button" value="添加数据" id="j_btnAddData" class="btnAdd" />
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>课程名称</th>
+          <th>所属学院</th>
+          <th>已学会</th>
+        </tr>
+      </thead>
+      <tbody id="j_tb">
+        <tr>
+          <td>JavaScript</td>
+          <td>前端学院</td>
+          <td><a href="javascript:;" class="get">GET</a></td>
+        </tr>
+        <tr>
+          <td>css</td>
+          <td>前端学院</td>
+          <td><a href="javascript:;" class="get">GET</a></td>
+        </tr>
+        <tr>
+          <td>html</td>
+          <td>前端学院</td>
+          <td><a href="javascript:;" class="get">GET</a></td>
+        </tr>
+        <tr>
+          <td>jQuery</td>
+          <td>前端学院</td>
+          <td><a href="javascript:;" class="get">GET</a></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+  <div id="j_mask" class="mask"></div>
+  <div id="j_formAdd" class="form-add">
+    <div class="form-add-title">
+      <span>添加数据</span>
+
+      <div id="j_hideFormAdd">x</div>
+    </div>
+    <div class="form-item">
+      <label class="lb" for="j_txtLesson">课程名称：</label>
+      <input class="txt" type="text" id="j_txtLesson" placeholder="请输入课程名称">
+    </div>
+    <div class="form-item">
+      <label class="lb" for="j_txtBelSch">所属学院：</label>
+      <input class="txt" type="text" id="j_txtBelSch" placeholder="请输入所属学院">
+    </div>
+    <div class="form-submit">
+      <input type="button" value="添加" id="j_btnAdd">
+    </div>
+  </div>
+
+  <script>
+    // 需求1: 点击j_btnAddData按钮, 让j_mask和j_formAdd展示
+    var oAddData = document.getElementById('j_btnAddData');
+    var oMask = document.getElementById('j_mask');
+    var oFormAdd = document.getElementById('j_formAdd');
+    oAddData.onclick = function(){
+      oMask.style.display = "block";
+      oFormAdd.style.display = "block";
+    }
+    // 需求2: 点击j_hideFormAdd关闭按钮, 让j_mask和j_formAdd隐藏
+    var oHideFormAdd = document.getElementById('j_hideFormAdd');
+    oHideFormAdd.onclick = function(){
+      oMask.style.display = "none";
+      oFormAdd.style.display = "none";
+    }
+
+    // 需求3: 点击j_btnAdd添加按钮, 获取j_txtLesson和j_txtBelSch文本框的value值, 并添加到j_tb元素最下面, 并让j_mask和j_formAdd隐藏, 同时让j_txtLesson和j_txtBelSch文本框的value值为空
+    var oAdd = document.getElementById('j_btnAdd');
+    var oLesson = document.getElementById('j_txtLesson');
+    var oBelSch = document.getElementById('j_txtBelSch');
+    var oTBody = document.getElementById('j_tb');
+    oAdd.onclick = function(){
+      // 获取value (获取的是value属性值, 不是调用方法)
+      var lesson = oLesson.value;
+      var belSch = oBelSch.value;
+
+      // 使用数组进行拼接html结构字符串
+      var arr = [];
+      arr.push('<td>'+lesson+'</td>');
+      arr.push('<td>'+belSch+'</td>');
+      arr.push('<td><a href="javascript:;" class="get">GET</a></td>')
+      var str = arr.join('');
+      // 考虑到时在末尾添加, 使用appendChild()方法
+      var newTr = document.createElement('tr');
+      // 设置内容, 使用赋值方式, 而不是调用方法
+      newTr.innerHTML = str;
+      oTBody.appendChild(newTr);
+
+      // 让j_mask和j_formAdd隐藏
+      oMask.style.display = "none";
+      oFormAdd.style.display = "none";
+
+      // 让j_txtLesson和j_txtBelSch文本框的value值为空
+      oLesson.value = '';
+      oBelSch.value = '';
+    }
+
+    // 需求4: 点击删除按钮, 将当前的tr删除 (使用事件委托方式,给将来添加的元素添加事件)
+    var oGets = document.querySelectorAll('a.get');
+    var oTBody = document.getElementById('j_tb');
+    oTBody.onclick = function(e){
+      // console.log(this); //tbody
+      // console.log(e.target.parentNode.parentNode);//tr
+      // console.log(e.target.nodeType); //1
+      if(e.target.nodeName === "A" && e.target.className === "get"){
+        console.log(e.target.parentNode);
+        e.target.parentNode.parentNode.remove();
+      }
+    }
+
+  </script>
+
+</body>
+
+</html>

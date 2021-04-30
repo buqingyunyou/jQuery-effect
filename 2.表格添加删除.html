@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="./css/checkDemo.css"/>
+  <script src="jquery-1.12.4.js"></script>
+  <script>
+    $(function () {
+      // 需求1: 给j_btnAddData添加点击事件, 让j_mask和j_formAdd展示
+      $('#j_btnAddData').click(function(){
+        $('#j_mask').show();
+        $('#j_formAdd').show();
+      })
+
+      // 需求2: 给j_hideFormAdd添加点击事件, 让j_mask和j_formAdd隐藏
+      $('#j_hideFormAdd').click(function(){
+        $('#j_mask').hide();
+        $('#j_formAdd').hide();
+      })
+
+      // 需求3: 给j_btnAdd绑定点击事件, 获取课程j_txtLesson和学院j_txtBelSch的value值,动态添加到j_tb中
+      $('#j_btnAdd').click(function(){
+        /* 
+          技巧:
+            通常判断输入框输入的值时, 要判断是否为空, 是否为空格
+              -判断是否为空, 直接if(xx)会自动隐式转换为布尔值
+              -空格, 可以在获取value值时, 调用.trim()方法, 将前后的空格去掉, 再判断是否为空
+        */
+
+        // 1.获取课程value和学院value, 套路: 去掉前后空格trim
+        var lesson = $('#j_txtLesson').val().trim();
+        var BelSch = $('#j_txtBelSch').val().trim();
+
+        // 健壮性代码:
+        if(!lesson || !BelSch){
+          alert("请输入正确的课程和学院...");
+          // 如果没有输入直接添加, 则不会添加到表格中, 即不会去执行下面的代码
+          // 再次点击添加按钮时, 又会重新调用该函数
+          return;
+        }
+        
+        // 2.将获取到的value值, 动态添加到tbody中
+
+        /* 
+          技巧:
+            需要使用字符串拼接时, 先进行数组拼接, 最后再转字符串, 可提高性能
+        */
+
+        var arr = [];
+        arr.push('<tr>');
+        arr.push('<td>'+lesson+'</td>');
+        arr.push('<td>'+BelSch+'</td>');
+        arr.push('<td><a href="javascript:;" class="get">GET</a></td>')
+        arr.push('</tr>');
+        var htmlStr = arr.join('');
+        $('#j_tb').append(htmlStr);
+
+        // 3.让j_mask和j_formAdd隐藏
+        $('#j_mask').hide();
+        $('#j_formAdd').hide();
+
+        // 4.清空课程j_txtLesson和学院j_txtBelSch的value值
+        $('#j_txtLesson').val('');
+        $('#j_txtBelSch').val('');
+
+      })
+
+      // 需求4: 点击.get删除按钮时, 将所在的tr删除掉
+      /* 
+        技巧:
+          考虑到将来可能会添加新的数据, 要给未来添加的删除按钮添加事件, 则需使用事件代理
+          给谁添加事件?
+            分析发现 tbody是一直存在的dom元素, 给它添加事件即可
+      */
+      $('#j_tb').click(function(e){
+        // 通过事件对象event,可获取到当前点击的元素, e是dom对象
+        if(e.target.className === 'get'){
+          // console.log(e.target);
+          $(e.target).parent().parent().remove();
+        }
+        // $(e.target.className === 'get' || false).parent().parent().remove();
+        // console.log(e.target.className === 'get' || false);
+        
+      })
+
+      /* 
+        1.获取事件触发元素的标签名
+          e.target.nodeName
+        2.获取事件触发元素的id
+          e.target.id
+        3.获取事件触发元素的类名
+          e.target.class
+        4.获取事件触发元素的内容
+          e.target.innerHTML
+
+      */
+
+
+
+
+
+
+
+
+      
+/*       // 1. 点击添加数据按钮,弹出输入框,展示遮盖层
+      
+      $('#j_btnAddData').click(function(){
+        $('#j_formAdd').css('display', 'block');
+        $('#j_mask').css('display', 'block');
+        
+      });
+      
+      $('#j_hideFormAdd').click(function(){
+        $('#j_formAdd').css('display', 'none');
+        $('#j_mask').css('display', 'none');
+    
+      });
+      
+      // 2. 获取输入框里的文本.当点击添加按钮的时候,将用户输入的内容加到表格中
+      
+      $('#j_btnAdd').click(function(){
+        
+//        2.1 获取到用户输入的数据
+         var belS = $('#j_txtBelSch').val().trim(); //只要获取用户输入,一定要先trim一下
+         var lesson = $('#j_txtLesson').val().trim();
+        
+        // 2.2 判断用户是否输入了内容,如果没有输入内容,提醒用户先输入
+          if(belS.length == 0 || lesson.length == 0){
+            alert('请先输入内容');
+            return; //如果进入到这个里面,后面的代码就不执行了
+          }
+          
+          // 2.3 如果代码能执行到这里,说明用户输入内容了
+        var str = '<tr><td>'+lesson+'</td><td>'+belS+'</td><td><a href="javascript:;" class="get">GET</a></td></tr>';
+        
+          $('#j_tb').append(str);
+        
+        
+        //2.4 把输入框和mask隐藏掉
+        $('#j_hideFormAdd').click();
+        
+        
+      }); */
+      
+      
+    });
+  </script>
+</head>
+
+<body>
+<div class="wrap">
+  <div>
+    <input type="button" value="添加数据" id="j_btnAddData" class="btnAdd"/>
+  </div>
+  <table>
+    <thead>
+    <tr>
+      <th>课程名称</th>
+      <th>所属学院</th>
+      <th>已学会</th>
+    </tr>
+    </thead>
+    <tbody id="j_tb">
+      <tr>
+        <td>JavaScript</td>
+        <td>前端学院</td>
+        <td><a href="javascript:;" class="get">GET</a></td>
+      </tr>
+      <tr>
+        <td>css</td>
+        <td>前端学院</td>
+        <td><a href="javascript:;" class="get">GET</a></td>
+      </tr>
+      <tr>
+        <td>html</td>
+        <td>前端学院</td>
+        <td><a href="javascript:;" class="get">GET</a></td>
+      </tr>
+      <tr>
+        <td>jQuery</td>
+        <td>前端学院</td>
+        <td><a href="javascript:;" class="get">GET</a></td>
+      </tr>
+    
+    </tbody>
+  </table>
+</div>
+<div id="j_mask" class="mask"></div>
+<div id="j_formAdd" class="form-add">
+  <div class="form-add-title">
+    <span>添加数据</span>
+    
+    <div id="j_hideFormAdd">x</div>
+  </div>
+  <div class="form-item">
+    <label class="lb" for="j_txtLesson">课程名称：</label>
+    <input class="txt" type="text" id="j_txtLesson" placeholder="请输入课程名称">
+  </div>
+  <div class="form-item">
+    <label class="lb" for="j_txtBelSch">所属学院：</label>
+    <input class="txt" type="text" id="j_txtBelSch" placeholder="请输入所属学院">
+  </div>
+  <div class="form-submit">
+    <input type="button" value="添加" id="j_btnAdd">
+  </div>
+</div>
+
+
+</body>
+
+</html>

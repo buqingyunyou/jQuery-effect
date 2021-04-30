@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0
+    }
+
+    img {
+      vertical-align: top;
+    }
+
+    .main {
+      margin: 0 auto;
+      width: 1000px;
+      padding-top: 10px;
+    }
+
+    .fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+  </style>
+  <script src="jquery-1.12.4.js"></script>
+  <script>
+    $(function () {
+      // 1.需求: 当滚动条滚动距离达到(topPart)的高度时, 给navBar添加类fixed; 当滚动条滚动距离小于(topPart)的高度时, 去掉navBar的类fixed
+      $(window).scroll(function () {
+        // 获取navBar的高度
+        var topHeight = $('#topPart').height();
+        // 实时获取滚动条滚动的距离
+        var distance = $(window).scrollTop();
+
+        if (distance >= topHeight) {
+          // 给navBar添加类fixed
+          $('#navBar').addClass('fixed')
+          /* 
+            当滚动条滚动距离达到(topPart)的高度时,给main添加一个margin-top,以免页面跳动
+            
+              页面跳动原因:
+                因为navBar添加fixed类后, 脱离文档流了, 所以mainPart会填补上去(出现页面跳动情况)
+          */
+          $('#mainPart').css({
+            marginTop: $('#navBar').height()
+          })
+        } else {
+          // 去掉navBar的类fixed
+          $('#navBar').removeClass('fixed')
+          $('#mainPart').css({
+            marginTop: 0
+          })
+        }
+      })
+
+
+    });
+  </script>
+
+</head>
+
+<body>
+  <div class="top" id="topPart">
+    <img src="images/top.png" alt="" />
+  </div>
+  <div class="nav" id="navBar">
+    <img src="images/nav.png" alt="" />
+  </div>
+  <div class="main" id="mainPart">
+    <img src="images/main.png" alt="" />
+  </div>
+</body>
+
+</html>

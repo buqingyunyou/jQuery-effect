@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8" />
+  <title></title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .wrap {
+      width: 300px;
+      margin: 100px auto 0;
+    }
+
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      border: 1px solid #c0c0c0;
+    }
+
+    th,
+    td {
+      border: 1px solid #d0d0d0;
+      color: #404060;
+      padding: 10px;
+    }
+
+    th {
+      background-color: #09c;
+      font: bold 16px '微软雅黑';
+      color: #fff;
+    }
+
+    td {
+      font: 14px '微软雅黑';
+    }
+
+    tbody tr {
+      background-color: #f0f0f0;
+    }
+
+    tbody tr:hover {
+      cursor: pointer;
+      background-color: #fafafa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>
+            <input type="checkbox" id="j_cbAll" />
+          </th>
+          <th>课程名称</th>
+          <th>所属学院</th>
+        </tr>
+      </thead>
+      <tbody id="j_tb">
+        <tr>
+          <td>
+            <input type="checkbox" />
+          </td>
+          <td>JavaScript</td>
+          <td>前端学院</td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" />
+          </td>
+          <td>css</td>
+          <td>前端学院</td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" />
+          </td>
+          <td>html</td>
+          <td>前端学院</td>
+        </tr>
+        <tr>
+          <td>
+            <input type="checkbox" />
+          </td>
+          <td>jQuery</td>
+          <td>前端学院</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <script src="jquery-1.12.4.js"></script>
+  <script>
+    //需求1: 点击j_cbAll复选框时,判断该input复选框是否选中, 如果选中, 让j_tb中的input checkbox全部选中; 如果不是选中, 则让j_tb中的input checkbox全部不选中
+    var oCbAll = document.getElementById('j_cbAll');
+    var oIpts = document.querySelectorAll('tr>td>input');
+    oCbAll.onclick = function () {
+      // console.log(this.checked);
+      if (this.checked) {
+        oIpts.forEach(function (item) {
+          item.checked = true;
+          // console.log(item.checked);
+        })
+      } else {
+        oIpts.forEach(function (item) {
+          item.checked = false;
+          // console.log(item.checked);
+        })
+      }
+    }
+
+    // oCbAll.checked= true;
+    // oCbAll.checked= false;
+
+
+    //需求2: 点击j_tb中的input复选框,判断当前j_tb的input复选框是否都已经选中,如果是, 则让j_cbAll选中, 如果存在没有选中的复选框, 则取消j_cbAll选中
+    // var center = null;
+    oIpts.forEach(function (item) {
+
+      /* // 给每个input绑定点击事件
+      center: item.onclick = function () {
+        // 判断是否所有input都已经选中
+        inner: oIpts.forEach(function (item1) {
+          // 如果存在有input没有选中, 则让全选框取消选中
+          if (item1.checked === false) {
+            oCbAll.checked = false;
+            console.log("存在input未选中");
+            return center;
+          }
+        })
+        // 如果循环判断结束后,说明没有出现未选中情况,此时设置全选框为选中
+        oCbAll.checked = true;
+      } */
+
+      item.onclick = function(){
+        /* 
+          因为如果使用forEach进行遍历, 导致出现两层函数, 使用return时需要指定return哪个函数
+          解决:
+            使用for循环, 则不需要考虑return哪层函数的问题
+        */
+        for(var i = 0; i < oIpts.length; i ++){
+          if(oIpts[i].checked === false){
+            oCbAll.checked = false;
+            return;
+          }
+          oCbAll.checked = true;
+        }
+      }
+
+
+    })
+  </script>
+</body>
+
+</html>

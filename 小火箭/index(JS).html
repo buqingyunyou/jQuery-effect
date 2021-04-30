@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    body {
+      height: 8000px;
+    }
+    
+    a {
+      color: #FFF;
+    }
+    
+    .actGotop {
+      position: fixed;
+      bottom: 50px;
+      right: 50px;
+      width: 150px;
+      height: 195px;
+      display: none;
+      z-index: 100;
+    }
+    
+    .actGotop a, .actGotop a:link {
+      width: 150px;
+      height: 195px;
+      display: inline-block;
+      background: url(images/gotop.png) no-repeat;
+      outline: none;
+    }
+    
+    .actGotop a:hover {
+      width: 150px;
+      height: 195px;
+      background: url(images/gotop.gif) no-repeat;
+      outline: none;
+    }
+  </style>
+
+</head>
+<body>
+
+
+
+<!-- 返回顶部小火箭 -->
+<div class="actGotop"><a href="javascript:;" title="Top"></a></div>
+
+<script src="jquery-1.12.4.js"></script>
+<script>
+  // 需求1: 当滚动条滚过的距离达到1000px时, 让小火箭.actGotop展示, 当滚动条滚过的距离小于1000px时, 让小火箭.actGotop隐藏
+  var oToTop = document.querySelector('.actGotop');
+  window.onscroll = function(){
+    
+    if(document.documentElement.scrollTop >= 1000){
+      oToTop.style.display = "block";
+    }else{
+      oToTop.style.display = "none";
+    }
+  }
+  // 需求2: 当点击小火箭时, 让滚动条缓慢回到顶部
+  var timer = null;
+  oToTop.onclick = function(){
+    // 1.获取当前滚动条的坐标
+    var startLocation = document.documentElement.scrollTop;
+    // console.log(startLocation);
+    // 2.设置结束坐标
+    var endLocation = 0;
+    clearInterval(timer);
+    timer = setInterval(function(){
+      startLocation-=100;
+      console.log(startLocation);
+      // 临界值
+      if(startLocation<=endLocation){
+        clearInterval(timer);
+      }
+      // 赋值
+      document.documentElement.scrollTop = startLocation;
+    },1)
+
+  }
+
+</script>
+
+</body>
+</html>
